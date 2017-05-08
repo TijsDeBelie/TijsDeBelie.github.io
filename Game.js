@@ -18,7 +18,7 @@ var numberH = Math.floor(window.innerHeight / 50);
 var numberW = Math.floor(window.innerWidth / 50);
 var offsetPlayerW = ((window.innerWidth) - (numberW * 50)) / 2;
 var offsetPlayerH = ((window.innerHeight) - (numberH * 50)) / 2;
-var MaxEnemy = 50000000;
+var MaxEnemy = 500;
 var highscores;
 
 
@@ -231,7 +231,7 @@ function createEnemy() {
 				vijanden.push(new Vijand(100, PosX, PosY));
 			}
 		}
-		time = setTimeout(createEnemy, 1 / ((Points / 10) + 1));
+		time = setTimeout(createEnemy, 10000 / ((Points / 10) + 1));
 	}
 }
 var Powerups = [];

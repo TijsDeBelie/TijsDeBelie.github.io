@@ -20,9 +20,6 @@ var offsetPlayerW = ((window.innerWidth) - (numberW * 50)) / 2;
 var offsetPlayerH = ((window.innerHeight) - (numberH * 50)) / 2;
 var MaxEnemy = 500;
 var highscores;
-
-
-
 var moveB;
 var moveE;
 var checkH;
@@ -31,8 +28,10 @@ var power;
 var vijanden = [];
 var outer;
 var inner;
-new Vijand(10, 100, 250);
+
 //sounds
+/*global Audio */
+
 var pain = new Audio('pain.mp3');
 var fire = new Audio('fire.mp3');
 fire.volume = 0.5;
@@ -106,7 +105,8 @@ Vijand.prototype.beweeg = function () {
 	if (this.Richting === "links") {
 		if (this.X > 0) {
 			this.links();
-		} else {
+		}
+		else {
 			this.Richting = "rechts";
 			this.rechts();
 		}
@@ -114,7 +114,8 @@ Vijand.prototype.beweeg = function () {
 	if (this.Richting === "rechts") {
 		if (this.X < (Math.floor((window.innerWidth - 50) / 50))) {
 			this.rechts();
-		} else {
+		}
+		else {
 			this.Richting = "links";
 			this.links();
 		}
@@ -135,7 +136,6 @@ Vijand.prototype.rechts = function () {
 	this.X += 0.04;
 };
 
-
 function updateHealth() {
 	"use strict";
 	outer.css('width', window.innerWidth / 2);
@@ -151,39 +151,29 @@ function checkAlive() {
 		if (hero.Health <= 0) {
 			document.body.innerHTML = "<br>GAME OVER <br>" + Points + ' punten' + '<br><button class="startknop" onclick="Home();">Restart game</button>';
 			pain.volume = 0;
-            fire.volume = 0;
-            hurt.volume = 0;
-            heal.volume = 0;
+			fire.volume = 0;
+			hurt.volume = 0;
+			heal.volume = 0;
 			gameOver();
 			execute = false;
 			kongregate.stats.submit('Score', Points);
+			G_points = Points;
+			StoreData();
 		}
 	}
 }
 
-
 function gameOver() {
-	
-clearInterval(moveB);
-clearInterval(moveE);
-clearInterval(checkH);
-clearInterval(alive); 
-clearInterval(power);
-clearInterval(time);
-	
-	
-	
+	clearInterval(moveB);
+	clearInterval(moveE);
+	clearInterval(checkH);
+	clearInterval(alive);
+	clearInterval(power);
+	clearInterval(time);
 	$('h1').remove();
 	$('h3').remove();
 	$('#ToonSpelregels').remove();
 	$('#ToonControls').remove();
-
-
-	container.remove();
-	outer.remove();
-	inner.remove();
-	
-	
 }
 
 function beweeg() {
@@ -195,43 +185,46 @@ function beweeg() {
 	}
 }
 var Points = 0;
-/*function storePoints() {
-	"use strict";
-	if (typeof (Storage) !== "undefined") {
-		if (localStorage.Points) {
-			
-			//localStorage.highscores.push(Points += 1);
-		} else {
-			//localStorage.Points += 1;
-		}
-		alert(' Punten: ' + localStorage.Points);
-	}
-}*/
+
 function increasePoints() {
 	"use strict";
 	Points += 1;
 	document.getElementById('points').innerHTML = Points;
-	//storePoints();
+	
 }
 var time;
 
+
+
+
+
+
+
 function createEnemy() {
-	////console.log(time)
 	"use strict";
+	
 	if (vijanden.length <= MaxEnemy) {
 		clearTimeout(time);
 		PosX = Math.floor(Math.random() * window.innerWidth) + offsetPlayerW;
 		PosY = Math.floor(Math.random() * window.innerHeight - 100) + offsetPlayerH;
-		if (PosX < window.innerWidth && PosX > (50 + offsetPlayerW) && PosY > offsetPlayerH && PosY < window.innerHeight - 100 && PosX !== hero.X && PosY !== hero.Y) {
+		if (PosX < window.innerWidth && PosX > (50 + offsetPlayerW) && PosY > offsetPlayerH && PosY < window.innerHeight - 100 && (PosX / 50 - 2 > hero.X || PosX / 50 < hero.X + 2) && (PosY / 50 - 2 > hero.Y || PosY / 50 < hero.Y + 2)) {
 			vijanden.push(new Vijand(100, PosX, PosY));
-		} else {
+		}
+		else {
 			PosX = Math.floor(Math.random() * window.innerWidth) + offsetPlayerW;
 			PosY = Math.floor(Math.random() * window.innerHeight - 100) + offsetPlayerH;
-			if (PosX < window.innerWidth && PosX > (50 + offsetPlayerW) && PosY > (0 + offsetPlayerH) && PosY < window.innerHeight - 100 && PosX !== hero.X && PosY !== hero.Y) {
+			if (PosX < window.innerWidth && PosX > (50 + offsetPlayerW) && PosY > (0 + offsetPlayerH) && (PosX / 50 - 2 > hero.X || PosX / 50 < hero.X + 2) && (PosY / 50 - 2 > hero.Y || PosY / 50 < hero.Y + 2)) {
 				vijanden.push(new Vijand(100, PosX, PosY));
 			}
 		}
 		time = setTimeout(createEnemy, 10000 / ((Points / 10) + 1));
+	}
+	if (vijanden.length == 0) {
+		
+		
+		setTimeout(createEnemy,100);
+		
+		
 	}
 }
 var Powerups = [];
@@ -311,12 +304,9 @@ function right() {
 var vurenmogelijk = false;
 
 function attack() {
-	
 	if (vurenmogelijk) {
-		
 		fire.currentTime = 0;
 		fire.play();
-		
 		if (Richting === 'rechts') {
 			Angle = 90;
 		}
@@ -358,16 +348,13 @@ document.onkeyup = function (e) {
 	}
 };
 
-
 function checkHeroCollide() {
 	"use strict";
 	var i;
 	for (i = 0; i < vijanden.length; i += 1) {
-		
-		
 		if (vijanden[i].X - 0.7 <= hero.X && hero.X <= vijanden[i].X + 0.7 && vijanden[i].Y === hero.Y) {
 			hurt.currentTime = 0;
-		hurt.play();
+			hurt.play();
 			vijanden[i].element.detach();
 			vijanden.splice(i, 1);
 			hero.Health -= 100;
@@ -405,8 +392,6 @@ function checkCollide() {
 				////console.log('ja');
 				pain.currentTime = 0;
 				pain.play();
-				
-				
 				vijanden[i].Health -= 100;
 				kogels[j].element.detach();
 				kogels.splice(j, 1);
@@ -433,32 +418,27 @@ function MoveBullet() {
 				left: "+=25"
 			}, 25);
 			kogels[j].X += 0.5;
-			
 		}
 		else if (kogels[j].Richting === 'links') {
 			kogels[j].element.animate({
 				left: "-=25"
 			}, 25);
 			kogels[j].X -= 0.5;
-			
 		}
 		else if (kogels[j].Richting === 'omhoog') {
 			kogels[j].element.animate({
 				bottom: "+=25"
 			}, 25);
 			kogels[j].Y += 0.5;
-			
 		}
 		else if (kogels[j].Richting === 'omlaag') {
 			kogels[j].element.animate({
 				bottom: "-=25"
 			}, 25);
 			kogels[j].Y -= 0.5;
-			
 		}
 		if (kogels[j] !== undefined) {
 			if (kogels[j].Y >= (window.innerHeight - offsetPlayerH) / 25 || kogels[j].Y <= -10 || kogels[j].X >= window.innerWidth / 25 || kogels[j].X <= -10) {
-				
 				kogels[j].element.detach();
 				kogels.splice(j, 1);
 			}
@@ -466,13 +446,7 @@ function MoveBullet() {
 		checkCollide();
 	}
 }
-
-
 /* GELEENDE CODE VAN STACKOVERFLOW */
-
-
-
-
 var arrow_keys_handler = function (e) {
 	switch (e.keyCode) {
 	case 37:
@@ -486,21 +460,8 @@ var arrow_keys_handler = function (e) {
 		break; // do not block other keys
 	}
 };
-
-
-
-
-
 window.addEventListener("keydown", arrow_keys_handler, false);
-
-
 /* STOP GELEENDE CODE */
-
-
-
-
-
-
 function Home() {
 	window.location = "index.html"
 }
@@ -516,36 +477,38 @@ function startscreen() {
 }
 var name;
 var pressed;
+
 function mute() {
-	
-	
-if(!pressed) {
-pain.volume = 0;
-fire.volume = 0;
-hurt.volume = 0;
-background.volume = 0;
-heal.volume = 0;
-pressed = true;
-}else {
-	
-pain.volume = 1;
-fire.volume = 0.5;
-hurt.volume = 1;
-background.volume = 0.5;
-heal.volume = 1;
-pressed = false;
-	
+	if (!pressed) {
+		
+		$('#Mute span').html("Unmute");
+		pain.volume = 0;
+		fire.volume = 0;
+		hurt.volume = 0;
+		background.volume = 0;
+		heal.volume = 0;
+		pressed = true;
+	}
+	else {
+		
+		$('#Mute span').html("Mute");
+		pain.volume = 1;
+		fire.volume = 0.5;
+		hurt.volume = 1;
+		background.volume = 0.5;
+		heal.volume = 1;
+		pressed = false;
+	}
 }
-	
-	
-	
-}
+
 function start() {
 	"use strict";
 	background.play();
 	background.loop = true;
+	G_naam = document.getElementById("naam").value
 	$('h1').remove();
 	$('h3').remove();
+	$('input').remove();
 	$('#ToonSpelregels').remove();
 	$('#ToonControls').remove();
 	var container = $('#container');
@@ -554,8 +517,6 @@ function start() {
 	container.css('width', numberW * 50);
 	container.css('top', offsetPlayerH + 50 + 'px');
 	container.append('<div id="points"></div>');
-	
-	
 	outer = $('<div id="outer"> </div>').appendTo(document.body);
 	inner = $('<div id="inner"> </div>').appendTo(outer);
 	$('#outer').css('left', offsetPlayerW);
@@ -564,15 +525,12 @@ function start() {
 	$('#points').css('top', 0);
 	document.getElementById('points').innerHTML = Points;
 	hero = new Hero(500, offsetPlayerW, offsetPlayerH);
-	
 	//setInterval(checkCollide, 10);
 	moveB = setInterval(MoveBullet, 50);
-moveE = setInterval(beweeg, 50);
-checkH = setInterval(checkHeroCollide, 20);
-alive = setInterval(checkAlive, 50);
-power = setInterval(createPowerUp, 4000);
-	
-	
+	moveE = setInterval(beweeg, 50);
+	checkH = setInterval(checkHeroCollide, 20);
+	alive = setInterval(checkAlive, 50);
+	power = setInterval(createPowerUp, 4000);
 	//setInterval(createEnemy, 50);
 	//autofire
 	//setInterval(attack, 100);
@@ -580,12 +538,12 @@ power = setInterval(createPowerUp, 4000);
 	createEnemy();
 	createEnemy();
 	updateHealth();
-	
 	$('.startknop').css('display', 'none');
 	hero.health = 500;
 	//setInterval(createPowerUp,10);
 	numberH = Math.floor(window.innerHeight / 50);
 	numberW = Math.floor(window.innerWidth / 50);
 	kongregate.stats.submit('Score', Points);
+	CreateDatabase();
 	
 }

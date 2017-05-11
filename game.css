@@ -130,7 +130,7 @@ body {
 
 
 h1{
-	padding-top: 2vh;
+	padding-top: 0.5vh;
 font-size: 10vw;
 -webkit-animation: pulsate 3s ease-out;
     -webkit-animation-iteration-count: infinite; 
@@ -270,4 +270,11 @@ sub {
 	
 	
 	
+}
+#naam{
+	
+	
+	position: absolute;
+	left: 0;
+	bottom: 0;
 }

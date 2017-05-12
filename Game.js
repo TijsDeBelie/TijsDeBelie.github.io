@@ -31,7 +31,7 @@ var inner;
 var gameovr = true;
 var Points = 0;
 //sounds
-/*global Audio, gameOver, kongregate, Points, storeData, G_points, time, checkHeroCollide, resetvuren, createDatabase, G_naam, gameovr*/
+/*global Audio, gameOver, kongregate, Points, storeData, G_points:true, time:true, checkHeroCollide, resetvuren, createDatabase, G_naam:true, gameovr*/
 
 var pain = new Audio('pain.mp3');
 var fire = new Audio('fire.mp3');
@@ -46,7 +46,7 @@ function Hero(Health, PosX, PosY) {
 	/*global $ */
 	this.Health = Health;
 	this.element = $('<div />', {
-		class: "cube"
+		"class": "cube"
 	});
 	this.element.css('left', PosX);
 	this.element.css('bottom', PosY);
@@ -60,7 +60,7 @@ function Kogel(PosX, PosY, Angle, Richting) {
 	"use strict";
 	/*global $ */
 	this.element = $('<div />', {
-		class: "kogel"
+		"class": "kogel"
 	});
 	this.X = Math.floor(PosX / 50);
 	this.Y = Math.floor(PosY / 50);
@@ -76,7 +76,7 @@ function PowerUp(PPosX, PPosY, Soort, tijd) {
 	"use strict";
 	/*global $ */
 	this.element = $('<div />', {
-		class: "Powerup"
+		"class": "Powerup"
 	});
 	this.X = Math.floor(PPosX / 50);
 	this.Y = Math.floor(PPosY / 50);
@@ -92,7 +92,7 @@ function Vijand(Health, PosX, PosY) {
 	"use strict";
 	this.Health = Health;
 	this.element = $('<div />', {
-		class: "enemy"
+		"class": "enemy"
 	});
 	this.X = Math.floor(PosX / 50);
 	this.Y = Math.floor(PosY / 50);
@@ -437,6 +437,8 @@ function MoveBullet() {
 		checkCollide();
 	}
 }
+
+
 /* GELEENDE CODE VAN STACKOVERFLOW */
 var arrow_keys_handler = function (e) {
 	"use strict";
@@ -454,6 +456,9 @@ var arrow_keys_handler = function (e) {
 };
 window.addEventListener("keydown", arrow_keys_handler, false);
 /* STOP GELEENDE CODE */
+
+
+
 function Home() {
 	"use strict";
 	window.location = "index.html";
@@ -495,7 +500,7 @@ function mute() {
 
 function start() {
 	"use strict";
-	if (document.getElementById('naam').value !== "Username") {
+	if (document.getElementById('naam').value !== "") {
 		gameovr = false;
 		background.play();
 		background.loop = true;

@@ -29,8 +29,10 @@ var vijanden = [];
 var outer;
 var inner;
 var gameovr = true;
+var Points = 0;
 //sounds
-/*global Audio */
+/*global Audio, gameOver, kongregate, Points, storeData, G_points, time, checkHeroCollide, resetvuren, createDatabase, G_naam, gameovr*/
+
 var pain = new Audio('pain.mp3');
 var fire = new Audio('fire.mp3');
 fire.volume = 0.5;
@@ -71,7 +73,7 @@ function Kogel(PosX, PosY, Angle, Richting) {
 }
 
 function PowerUp(PPosX, PPosY, Soort, tijd) {
-	"use strict;";
+	"use strict";
 	/*global $ */
 	this.element = $('<div />', {
 		class: "Powerup"
@@ -87,7 +89,7 @@ function PowerUp(PPosX, PPosY, Soort, tijd) {
 //create enemy and append to level
 //give health and X and Y position
 function Vijand(Health, PosX, PosY) {
-	"use strict;";
+	"use strict";
 	this.Health = Health;
 	this.element = $('<div />', {
 		class: "enemy"
@@ -100,12 +102,11 @@ function Vijand(Health, PosX, PosY) {
 	this.Richting = 'rechts';
 }
 Vijand.prototype.beweeg = function () {
-	"use strict;";
+	"use strict";
 	if (this.Richting === "links") {
 		if (this.X > 0) {
 			this.links();
-		}
-		else {
+		} else {
 			this.Richting = "rechts";
 			this.rechts();
 		}
@@ -113,22 +114,21 @@ Vijand.prototype.beweeg = function () {
 	if (this.Richting === "rechts") {
 		if (this.X < (Math.floor((window.innerWidth - 50) / 50))) {
 			this.rechts();
-		}
-		else {
+		} else {
 			this.Richting = "links";
 			this.links();
 		}
 	}
 };
 Vijand.prototype.links = function () {
-	"use strict;";
+	"use strict";
 	this.element.animate({
 		left: "-=2"
 	}, 1);
 	this.X -= 0.04;
 };
 Vijand.prototype.rechts = function () {
-	"use strict;";
+	"use strict";
 	this.element.animate({
 		left: "+=2"
 	}, 1);
@@ -145,10 +145,10 @@ var heroHealth = document.getElementById("health");
 var execute = true;
 
 function checkAlive() {
-	"use strict;";
-	if (execute = true) {
+	"use strict";
+	if (execute === true) {
 		if (hero.Health <= 0) {
-			window.location = "gameover.html"
+			window.location = "gameover.html";
 			gameovr = true;
 			pain.volume = 0;
 			fire.volume = 0;
@@ -158,12 +158,13 @@ function checkAlive() {
 			execute = false;
 			kongregate.stats.submit('Score', Points);
 			G_points = Points;
-			StoreData();
+			storeData();
 		}
 	}
 }
 
 function gameOver() {
+	"use strict";
 	clearInterval(moveB);
 	clearInterval(moveE);
 	clearInterval(checkH);
@@ -184,7 +185,7 @@ function beweeg() {
 		vijanden[i].beweeg();
 	}
 }
-var Points = 0;
+
 
 function increasePoints() {
 	"use strict";
@@ -201,17 +202,16 @@ function createEnemy() {
 		PosY = Math.floor(Math.random() * window.innerHeight - 100) + offsetPlayerH;
 		if (PosX < window.innerWidth && PosX > (50 + offsetPlayerW) && PosY > offsetPlayerH && PosY < window.innerHeight - 100 && (PosX / 50 - 2 > hero.X || PosX / 50 < hero.X + 2) && (PosY / 50 - 2 > hero.Y || PosY / 50 < hero.Y + 2)) {
 			vijanden.push(new Vijand(100, PosX, PosY));
-		}
-		else {
+		} else {
 			PosX = Math.floor(Math.random() * window.innerWidth) + offsetPlayerW;
 			PosY = Math.floor(Math.random() * window.innerHeight - 100) + offsetPlayerH;
-			if (PosX < window.innerWidth && PosX > (50 + offsetPlayerW) && PosY > (0 + offsetPlayerH) && (PosX / 50 - 2 > hero.X || PosX / 50 < hero.X + 2) && (PosY / 50 - 2 > hero.Y || PosY / 50 < hero.Y + 2)) {
+			if (PosX < window.innerWidth && PosX > (50 + offsetPlayerW) && PosY > (offsetPlayerH) && (PosX / 50 - 2 > hero.X || PosX / 50 < hero.X + 2) && (PosY / 50 - 2 > hero.Y || PosY / 50 < hero.Y + 2)) {
 				vijanden.push(new Vijand(100, PosX, PosY));
 			}
 		}
 		time = setTimeout(createEnemy, 10000 / ((Points / 10) + 1));
 	}
-	if (vijanden.length == 0) {
+	if (vijanden.length === 0) {
 		setTimeout(createEnemy, 100);
 	}
 }
@@ -219,11 +219,12 @@ var Powerups = [];
 var RND;
 
 function createPowerUp() {
+	"use strict";
 	RND = Math.floor(Math.random() * 10);
 	if (RND < 2) {
 		PPosX = Math.floor(Math.random() * window.innerWidth - 50) + offsetPlayerW;
 		PPosY = Math.floor(Math.random() * window.innerHeight) + offsetPlayerH;
-		if (PPosX < (window.innerWidth - 50) && PPosX > (0 + offsetPlayerW) && PPosY > (50 + offsetPlayerH) && PPosY < (window.innerHeight - 50)) {
+		if (PPosX < (window.innerWidth - 50) && PPosX > (offsetPlayerW) && PPosY > (50 + offsetPlayerH) && PPosY < (window.innerHeight - 50)) {
 			Powerups.push(new PowerUp(PPosX, PPosY, "health", 10));
 		}
 	}
@@ -243,6 +244,7 @@ BEWEEGFUNCTIES
 
 */
 function left() {
+	"use strict";
 	hero.element.rotate(0);
 	Richting = 'links';
 	if ((hero.X - 1) >= 0) {
@@ -255,6 +257,7 @@ function left() {
 }
 
 function up() {
+	"use strict";
 	hero.element.rotate(90);
 	Richting = 'omhoog';
 	if (hero.Y + 1 < Math.floor(window.innerHeight / 50) - 1) {
@@ -267,6 +270,7 @@ function up() {
 }
 
 function down() {
+	"use strict";
 	hero.element.rotate(-90);
 	Richting = 'omlaag';
 	if (hero.Y - 1 >= 0) {
@@ -279,6 +283,7 @@ function down() {
 }
 
 function right() {
+	"use strict";
 	hero.element.rotate(180);
 	Richting = 'rechts';
 	if (hero.X + 1 <= Math.floor(window.innerWidth / 50) - 1) {
@@ -292,19 +297,17 @@ function right() {
 var vurenmogelijk = false;
 
 function attack() {
+	"use strict";
 	if (vurenmogelijk) {
 		fire.currentTime = 0;
 		fire.play();
 		if (Richting === 'rechts') {
 			Angle = 90;
-		}
-		else if (Richting === 'links') {
+		} else if (Richting === 'links') {
 			Angle = -90;
-		}
-		else if (Richting === 'omhoog') {
+		} else if (Richting === 'omhoog') {
 			Angle = 0;
-		}
-		else if (Richting === 'omlaag') {
+		} else if (Richting === 'omlaag') {
 			Angle = 180;
 		}
 		vurenmogelijk = false;
@@ -314,9 +317,11 @@ function attack() {
 }
 
 function resetvuren() {
+	"use strict";
 	vurenmogelijk = true;
 }
 document.onkeyup = function (e) {
+	"use strict";
 	if (!gameovr) {
 		switch (e.keyCode) {
 		case 37:
@@ -361,7 +366,6 @@ function checkHeroCollide() {
 				hero.Health += 100;
 			}
 		}
-		11
 	}
 	updateHealth();
 }
@@ -370,10 +374,9 @@ function checkCollide() {
 	"use strict";
 	checkHeroCollide();
 	var j, i;
-	lus: for (i = 0; i < vijanden.length; i += 1) {
+lus:for (i = 0; i < vijanden.length; i += 1) {
 		for (j = 0; j < kogels.length; j += 1) {
-			var kogelX = kogels[j].X
-				, kogelY = kogels[j].Y;
+			var kogelX = kogels[j].X, kogelY = kogels[j].Y;
 			if (vijanden[i].Health === 0) {
 				////console.log(vijanden[i].Health)
 				vijanden[i].element.detach();
@@ -409,20 +412,17 @@ function MoveBullet() {
 				left: "+=25"
 			}, 25);
 			kogels[j].X += 0.5;
-		}
-		else if (kogels[j].Richting === 'links') {
+		} else if (kogels[j].Richting === 'links') {
 			kogels[j].element.animate({
 				left: "-=25"
 			}, 25);
 			kogels[j].X -= 0.5;
-		}
-		else if (kogels[j].Richting === 'omhoog') {
+		} else if (kogels[j].Richting === 'omhoog') {
 			kogels[j].element.animate({
 				bottom: "+=25"
 			}, 25);
 			kogels[j].Y += 0.5;
-		}
-		else if (kogels[j].Richting === 'omlaag') {
+		} else if (kogels[j].Richting === 'omlaag') {
 			kogels[j].element.animate({
 				bottom: "-=25"
 			}, 25);
@@ -439,6 +439,7 @@ function MoveBullet() {
 }
 /* GELEENDE CODE VAN STACKOVERFLOW */
 var arrow_keys_handler = function (e) {
+	"use strict";
 	switch (e.keyCode) {
 	case 37:
 	case 39:
@@ -454,11 +455,13 @@ var arrow_keys_handler = function (e) {
 window.addEventListener("keydown", arrow_keys_handler, false);
 /* STOP GELEENDE CODE */
 function Home() {
-	window.location = "index.html"
+	"use strict";
+	window.location = "index.html";
 }
 
 function Highscore() {
-	window.location = "Highscores.html"
+	"use strict";
+	window.location = "Highscores.html";
 }
 
 function startscreen() {
@@ -470,6 +473,7 @@ var name;
 var pressed;
 
 function mute() {
+	"use strict";
 	if (!pressed) {
 		$('#Mute span').html("Unmute");
 		pain.volume = 0;
@@ -478,8 +482,7 @@ function mute() {
 		background.volume = 0;
 		heal.volume = 0;
 		pressed = true;
-	}
-	else {
+	} else {
 		$('#Mute span').html("Mute");
 		pain.volume = 1;
 		fire.volume = 0.5;
@@ -492,13 +495,13 @@ function mute() {
 
 function start() {
 	"use strict";
-	if (document.getElementById('naam').value != "Username") {
+	if (document.getElementById('naam').value !== "Username") {
 		gameovr = false;
 		background.play();
 		background.loop = true;
 		$('h1').remove();
 		$('h3').remove();
-		G_naam = document.getElementById("naam").value
+		G_naam = document.getElementById("naam").value;
 		$('input').remove();
 		$('#ToonSpelregels').remove();
 		$('#ToonControls').remove();
@@ -535,9 +538,8 @@ function start() {
 		numberH = Math.floor(window.innerHeight / 50);
 		numberW = Math.floor(window.innerWidth / 50);
 		kongregate.stats.submit('Score', Points);
-		CreateDatabase();
-	}
-	else {
+		createDatabase();
+	} else {
 		$("#naam").css("background-color", "red");
 	}
 }

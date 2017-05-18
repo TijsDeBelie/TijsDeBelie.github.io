@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>Highscores</title>
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" type="text/css" href="game.css">
+	<script src="Game.js"></script>
+	<script src="jquery-3.1.1.js"></script>
+	<script>
+		"use strict";
+		/*global $, console */
+		$(function () {
+			// de JSON data ophalen
+			$.getJSON({
+				type: "GET"
+				, url: "https://www.kongregate.com/api/high_scores/lifetime/129134.json"
+				, dataType: 'json'
+			}).done(function (response) {
+				// ok
+				var antwoord = ""
+					, i;
+				for (i = 0; i < response.lifetime_scores.length; i++) {
+					if (i < 10) {
+						antwoord += "<tr class='Username'><td>" + response.lifetime_scores[i].username + "<\/td>";
+						antwoord += "<td>" + response.lifetime_scores[i].score + "<\/td><\/tr>";
+					}
+				}
+				$("#adres tbody").html(antwoord);
+			}).fail(function () {
+				$("th").remove();
+				
+				var db = openDatabase('Highscores', '1.0', 'Highscores of the Dungeon Runner game', 2 * 1024 * 1024);
+				db.transaction(function (tx) {
+					tx.executeSql('SELECT * FROM LOGS order by punten desc', [], function (tx, results) {
+						var len = results.rows.length
+							, i;
+						var antwoord = "";
+						for (i = 0; i < len; i++) {
+							if (i < 10) {
+							antwoord += results.rows.item(i).naam
+							antwoord += " " + results.rows.item(i).punten + "<br>"
+							}
+						}
+						$("#status").html(antwoord);
+					}, null);
+				});
+			}).always(function () {
+				console.log("Klaar");
+			});
+		});
+	</script>
+</head>
+
+<body>
+	<div>
+		<header>
+			<h1>Highscores Top 10</h1> </header>
+		<section>
+			<article>
+				<p id="status"></p>
+				<table id="adres">
+					<thead>
+						<tr>
+							<th>Username</th>
+							<th>Score</th>
+						</tr>
+					</thead>
+					<tbody> </tbody>
+				</table>
+			</article>
+			<button class="startknop" onclick="home()">Home</button>
+		</section>

@@ -159,7 +159,6 @@ function checkAlive() {
 			heal.volume = 0;
 			gameOver();
 			execute = false;
-			kongregate.stats.submit('Score', Points);
 		}
 	}
 }
@@ -234,7 +233,7 @@ function createEnemy() {
 			PosX = Math.floor(Math.random() * window.innerWidth - 100) + offsetPlayerW;
 			PosY = Math.floor(Math.random() * window.innerHeight - 100) + offsetPlayerH;
 			if (PosX < window.innerWidth && PosX > (50 + offsetPlayerW) && PosY > offsetPlayerH && PosY < window.innerHeight - 100 && (PosX / 50 - 2 > hero.X || PosX / 50 < hero.X + 2) && (PosY / 50 - 2 > hero.Y || PosY / 50 < hero.Y + 2)) {
-				vijanden.push(new Vijand(100, PosX, PosY,direction));
+				vijanden.push(new Vijand(100, PosX, PosY, direction));
 			}
 			else {
 				PosX = Math.floor(Math.random() * window.innerWidth - 100) + offsetPlayerW;
@@ -588,7 +587,6 @@ function start() {
 		//setInterval(createPowerUp,10);
 		numberH = Math.floor(window.innerHeight / 50);
 		numberW = Math.floor(window.innerWidth / 50);
-		kongregate.stats.submit('Score', Points);
 		createDatabase();
 		timerVar = setInterval(countTimer, 1000);
 		totalSeconds = 0;

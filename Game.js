@@ -30,9 +30,11 @@ var outer;
 var inner;
 var gameovr = true;
 var Points = 0;
+var direction;
+var totalSeconds = 0;
+var timerVar;
 //sounds
 /*global Audio, gameOver, kongregate, Points, storeData, G_points:true, time:true, checkHeroCollide, resetvuren, createDatabase, G_naam:true, gameovr*/
-
 var pain = new Audio('pain.mp3');
 var fire = new Audio('fire.mp3');
 fire.volume = 0.5;
@@ -88,7 +90,7 @@ function PowerUp(PPosX, PPosY, Soort, tijd) {
 }
 //create enemy and append to level
 //give health and X and Y position
-function Vijand(Health, PosX, PosY) {
+function Vijand(Health, PosX, PosY, direction) {
 	"use strict";
 	this.Health = Health;
 	this.element = $('<div />', {
@@ -99,22 +101,24 @@ function Vijand(Health, PosX, PosY) {
 	this.element.css('left', Math.floor(PosX / 50) * 50);
 	this.element.css('bottom', Math.floor(PosY / 50) * 50);
 	this.element.appendTo(level);
-	this.Richting = 'rechts';
+	this.Richting = direction;
 }
 Vijand.prototype.beweeg = function () {
 	"use strict";
-	if (this.Richting === "links") {
+	if (this.Richting == "links") {
 		if (this.X > 0) {
 			this.links();
-		} else {
+		}
+		else {
 			this.Richting = "rechts";
 			this.rechts();
 		}
 	}
-	if (this.Richting === "rechts") {
+	if (this.Richting == "rechts") {
 		if (this.X < (Math.floor((window.innerWidth - 50) / 50))) {
 			this.rechts();
-		} else {
+		}
+		else {
 			this.Richting = "links";
 			this.links();
 		}
@@ -148,7 +152,6 @@ function checkAlive() {
 	"use strict";
 	if (execute === true) {
 		if (hero.Health <= 0) {
-			
 			gameovr = true;
 			pain.volume = 0;
 			fire.volume = 0;
@@ -157,15 +160,13 @@ function checkAlive() {
 			gameOver();
 			execute = false;
 			kongregate.stats.submit('Score', Points);
-			
-			
 		}
 	}
 }
 var end;
+
 function gameOver() {
 	"use strict";
-	
 	G_points = Points;
 	window.location = "gameover.html";
 	clearInterval(moveB);
@@ -189,19 +190,18 @@ function beweeg() {
 		vijanden[i].beweeg();
 	}
 }
-
-$(window).on('resize', function(){
-numberH = Math.floor(window.innerHeight / 50);
-numberW = Math.floor(window.innerWidth / 50);
-offsetPlayerW = ((window.innerWidth) - (numberW * 50)) / 2;
-offsetPlayerH = ((window.innerHeight) - (numberH * 50)) / 2;
+$(window).on('resize', function () {
+	numberH = Math.floor(window.innerHeight / 50);
+	numberW = Math.floor(window.innerWidth / 50);
+	offsetPlayerW = ((window.innerWidth) - (numberW * 50)) / 2;
+	offsetPlayerH = ((window.innerHeight) - (numberH * 50)) / 2;
 	container = $('#container');
 	container.css('height', (numberH * 50) - 50);
-		container.css('width', numberW * 50);
-		container.css('top', offsetPlayerH + 50 + 'px');
+	container.css('width', numberW * 50);
+	container.css('top', offsetPlayerH + 50 + 'px');
 	$('#outer').css('left', offsetPlayerW);
-		$('#outer').css('top', offsetPlayerH);
-		$('#points').css('right', offsetPlayerW);
+	$('#outer').css('top', offsetPlayerH);
+	$('#points').css('right', offsetPlayerW);
 	hero.X = 0;
 	hero.Y = 0;
 	PosX = offsetPlayerW;
@@ -210,12 +210,11 @@ offsetPlayerH = ((window.innerHeight) - (numberH * 50)) / 2;
 	hero.element.css('bottom', PosY);
 });
 
-
 function increasePoints() {
 	"use strict";
 	Points += 1;
 	document.getElementById('points').innerHTML = Points;
-	console.log(10000 / Math.sqrt((Points + 1) * (numberH * numberW)/100));
+	console.log(10000 / Math.sqrt((Points + 1) * (numberH * numberW) / 100));
 }
 var time;
 
@@ -223,21 +222,32 @@ function createEnemy() {
 	"use strict";
 	if (vijanden.length <= MaxEnemy) {
 		clearTimeout(time);
-		PosX = Math.floor(Math.random() * window.innerWidth - 100) + offsetPlayerW;
-		PosY = Math.floor(Math.random() * window.innerHeight - 100) + offsetPlayerH;
-		if (PosX < window.innerWidth && PosX > (50 + offsetPlayerW) && PosY > offsetPlayerH && PosY < window.innerHeight - 100 && (PosX / 50 - 2 > hero.X || PosX / 50 < hero.X + 2) && (PosY / 50 - 2 > hero.Y || PosY / 50 < hero.Y + 2)) {
-			vijanden.push(new Vijand(100, PosX, PosY));
-		} else {
+		RND = Math.floor(Math.random() * 2);
+		if (RND === 0) {
+			direction = 'links';
+		}
+		else if (RND === 1) {
+			direction = 'rechts'
+		}
+		if (vijanden.length <= MaxEnemy) {
+			clearTimeout(time);
 			PosX = Math.floor(Math.random() * window.innerWidth - 100) + offsetPlayerW;
 			PosY = Math.floor(Math.random() * window.innerHeight - 100) + offsetPlayerH;
-			if (PosX < window.innerWidth && PosX > (50 + offsetPlayerW) && PosY > (offsetPlayerH) && (PosX / 50 - 2 > hero.X || PosX / 50 < hero.X + 2) && (PosY / 50 - 2 > hero.Y || PosY / 50 < hero.Y + 2)) {
-				vijanden.push(new Vijand(100, PosX, PosY));
+			if (PosX < window.innerWidth && PosX > (50 + offsetPlayerW) && PosY > offsetPlayerH && PosY < window.innerHeight - 100 && (PosX / 50 - 2 > hero.X || PosX / 50 < hero.X + 2) && (PosY / 50 - 2 > hero.Y || PosY / 50 < hero.Y + 2)) {
+				vijanden.push(new Vijand(100, PosX, PosY,direction));
 			}
+			else {
+				PosX = Math.floor(Math.random() * window.innerWidth - 100) + offsetPlayerW;
+				PosY = Math.floor(Math.random() * window.innerHeight - 100) + offsetPlayerH;
+				if (PosX < window.innerWidth && PosX > (50 + offsetPlayerW) && PosY > (offsetPlayerH) && (PosX / 50 - 2 > hero.X || PosX / 50 < hero.X + 2) && (PosY / 50 - 2 > hero.Y || PosY / 50 < hero.Y + 2)) {
+					vijanden.push(new Vijand(100, PosX, PosY, direction));
+				}
+			}
+			time = setTimeout(createEnemy, 10000 / Math.sqrt((Points + 1) * (numberH * numberW) / 100));
 		}
-		time = setTimeout(createEnemy, 10000 / Math.sqrt((Points + 1) * (numberH * numberW)/100));
-	}
-	if (vijanden.length === 0) {
-		setTimeout(createEnemy, 10);
+		if (vijanden.length === 0) {
+			setTimeout(createEnemy, 10);
+		}
 	}
 }
 var Powerups = [];
@@ -328,11 +338,14 @@ function attack() {
 		fire.play();
 		if (Richting === 'rechts') {
 			Angle = 90;
-		} else if (Richting === 'links') {
+		}
+		else if (Richting === 'links') {
 			Angle = -90;
-		} else if (Richting === 'omhoog') {
+		}
+		else if (Richting === 'omhoog') {
 			Angle = 0;
-		} else if (Richting === 'omlaag') {
+		}
+		else if (Richting === 'omlaag') {
 			Angle = 180;
 		}
 		vurenmogelijk = false;
@@ -399,9 +412,10 @@ function checkCollide() {
 	"use strict";
 	checkHeroCollide();
 	var j, i;
-lus:for (i = 0; i < vijanden.length; i += 1) {
+	lus: for (i = 0; i < vijanden.length; i += 1) {
 		for (j = 0; j < kogels.length; j += 1) {
-			var kogelX = kogels[j].X, kogelY = kogels[j].Y;
+			var kogelX = kogels[j].X
+				, kogelY = kogels[j].Y;
 			if (vijanden[i].Health === 0) {
 				////console.log(vijanden[i].Health)
 				vijanden[i].element.detach();
@@ -437,17 +451,20 @@ function MoveBullet() {
 				left: "+=25"
 			}, 25);
 			kogels[j].X += 0.5;
-		} else if (kogels[j].Richting === 'links') {
+		}
+		else if (kogels[j].Richting === 'links') {
 			kogels[j].element.animate({
 				left: "-=25"
 			}, 25);
 			kogels[j].X -= 0.5;
-		} else if (kogels[j].Richting === 'omhoog') {
+		}
+		else if (kogels[j].Richting === 'omhoog') {
 			kogels[j].element.animate({
 				bottom: "+=25"
 			}, 25);
 			kogels[j].Y += 0.5;
-		} else if (kogels[j].Richting === 'omlaag') {
+		}
+		else if (kogels[j].Richting === 'omlaag') {
 			kogels[j].element.animate({
 				bottom: "-=25"
 			}, 25);
@@ -462,8 +479,6 @@ function MoveBullet() {
 		checkCollide();
 	}
 }
-
-
 /* GELEENDE CODE VAN STACKOVERFLOW */
 var arrow_keys_handler = function (e) {
 	"use strict";
@@ -481,9 +496,6 @@ var arrow_keys_handler = function (e) {
 };
 window.addEventListener("keydown", arrow_keys_handler, false);
 /* STOP GELEENDE CODE */
-
-
-
 function home() {
 	"use strict";
 	window.location = "index.html";
@@ -502,8 +514,6 @@ function startscreen() {
 var name;
 var pressed;
 
-
-
 function mute() {
 	"use strict";
 	if (!pressed) {
@@ -514,7 +524,8 @@ function mute() {
 		background.volume = 0;
 		heal.volume = 0;
 		pressed = true;
-	} else {
+	}
+	else {
 		$('#Mute span').html("Mute");
 		pain.volume = 1;
 		fire.volume = 0.5;
@@ -525,10 +536,17 @@ function mute() {
 	}
 }
 
+function countTimer() {
+	++totalSeconds;
+	var hour = Math.floor(totalSeconds / 3600);
+	var minute = Math.floor((totalSeconds - hour * 3600) / 60);
+	var seconds = totalSeconds - (hour * 3600 + minute * 60);
+	document.getElementById("timer").innerHTML = hour + ":" + minute + ":" + seconds;
+}
+
 function start() {
 	"use strict";
 	if (document.getElementById('naam').value !== "") {
-		
 		gameovr = false;
 		background.play();
 		background.loop = true;
@@ -572,10 +590,10 @@ function start() {
 		numberW = Math.floor(window.innerWidth / 50);
 		kongregate.stats.submit('Score', Points);
 		createDatabase();
-	} else {
+		timerVar = setInterval(countTimer, 1000);
+		totalSeconds = 0;
+	}
+	else {
 		$("#naam").css("border-color", "red");
-		
-		
-		
 	}
 }

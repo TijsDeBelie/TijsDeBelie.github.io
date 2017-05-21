@@ -23,12 +23,8 @@ body {
 #container {
 	background-color: grey;
 	display: inline-block;
-
-	
 	position: relative;
 	z-index: -1;
-	
-	
 	margin: auto;
 }
 
@@ -40,7 +36,6 @@ body {
 	height: 50px;
 	width: 50px;
 }
-
 
 .enemy {
 	width: 50px;
@@ -61,7 +56,7 @@ body {
 	width: 50px;
 }
 
-#outer{
+#outer {
 	background-color: black;
 	height: 20px;
 	position: fixed;
@@ -72,11 +67,9 @@ body {
 	border-width: 1px;
 	border-radius: 10px;
 	opacity: 0.6;
-	
-	
 }
 
-#inner{
+#inner {
 	background-color: red;
 	position: fixed;
 	height: 20px;
@@ -86,10 +79,9 @@ body {
 	border-color: white;
 	border-width: 1px;
 	border-radius: 10px;
-	
-	
 }
-#points{
+
+#points {
 	width: 100px;
 	height: 50px;
 	position: fixed;
@@ -97,26 +89,17 @@ body {
 	font-size: 40px;
 	text-align: center;
 	vertical-align: middle;
-	
-	
-	
-	
 }
+
 .startknop {
 	width: 15vh;
 	height: 10vh;
 	color: white;
 	background-color: black;
 	border-radius: 50%;
-	
-	
-	
-	
-	
 }
 
-
-.Powerup{
+.Powerup {
 	position: fixed;
 	background-image: url(heart.gif);
 	background-size: contain;
@@ -124,92 +107,69 @@ body {
 	background-size: 50px 50px;
 	width: 50px;
 	height: 50px;
-	
-	
 }
 
-
-h1{
+h1 {
 	padding-top: 0.5vh;
-font-size: 10vw;
--webkit-animation: pulsate 3s ease-out;
-    -webkit-animation-iteration-count: infinite; 
-	
-	
+	font-size: 10vw;
+	-webkit-animation: pulsate 3s ease-out;
+	-webkit-animation-iteration-count: infinite;
 }
 
-h2{
-	
+h2 {
 	font-size: 3vw;
-	
 }
 
 @-webkit-keyframes pulsate {
-    0% { 
-        opacity: 0.5;
+	0% {
+		opacity: 0.5;
 		color: aqua;
-		
-    }
-    25% { 
-        opacity: 1.0;
+	}
+	25% {
+		opacity: 1.0;
 		color: chartreuse;
-    }
-    50% { 
-        opacity: 0.5;
+	}
+	50% {
+		opacity: 0.5;
 		color: crimson;
-    }
-	75% { 
-        opacity: 1.0;
+	}
+	75% {
+		opacity: 1.0;
 		color: yellow;
-    }
-	100% { 
-        opacity: 0.5;
+	}
+	100% {
+		opacity: 0.5;
 		color: orange;
-    }
-	
-	
+	}
 }
-h3{
-	
+
+h3 {
 	font-size: 3vw;
-	
 }
+
 table {
 	margin: auto;
 	position: relative;
-	
-	
 }
 
-th{
-	
+th {
 	font-size: 15px;
-	
-	
-	
 }
-
 
 td {
-	
 	font-size: 15px;
 	border-style: solid;
-				border-color: white;
-				border-width: 2px;
-				padding-left: 50px;
-				padding-right: 50px;
-	
+	border-color: white;
+	border-width: 2px;
+	padding-left: 50px;
+	padding-right: 50px;
 }
 
-
-	
 #spelregels {
 	background-color: grey;
 	font-size: 5vh;
-	
 	color: White;
 	display: none;
-	
 	position: absolute;
 	width: 60%;
 	height: 30%;
@@ -245,7 +205,6 @@ td {
 #controls {
 	background-color: grey;
 	font-size: 4vh;
-	
 	color: White;
 	display: none;
 	margin: auto;
@@ -261,19 +220,17 @@ td {
 sub {
 	font-size: 2vh;
 }
-#Mute{
+
+#Mute {
 	width: 70px;
 	height: 20px;
 	position: absolute;
-	right: 40px;;
+	right: 40px;
+	;
 	bottom: 0;
-	
-	
-	
 }
-#naam{
-	
-	
+
+#naam {
 	position: absolute;
 	left: 0;
 	bottom: 0;
@@ -283,9 +240,15 @@ sub {
 	border-color: white;
 	border-style: solid;
 	text-align: center;
-	
 }
-p{
+
+p {
 	font-size: 20px;
-	
-	
+}
+
+#timer {
+	font-size: 3vw;
+	position: relative;
+	bottom: 5%;
+	opacity: 0.2;
+}

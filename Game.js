@@ -33,8 +33,14 @@ var Points = 0;
 var direction;
 var totalSeconds = 0;
 var timerVar;
+var hour;
+var minute;
+var seconds;
+var container;
+var Powerups = [];
+var RND;
 //sounds
-/*global Audio, gameOver, kongregate, Points, storeData, G_points:true, time:true, checkHeroCollide, resetvuren, createDatabase, G_naam:true, gameovr*/
+/*global Audio, gameOver, kongregate, Points, storeData, G_points:true, time:true, checkHeroCollide, resetvuren, createDatabase, G_naam:true, gameovr, G_tijd:true*/
 var pain = new Audio('pain.mp3');
 var fire = new Audio('fire.mp3');
 fire.volume = 0.5;
@@ -105,20 +111,18 @@ function Vijand(Health, PosX, PosY, direction) {
 }
 Vijand.prototype.beweeg = function () {
 	"use strict";
-	if (this.Richting == "links") {
+	if (this.Richting === "links") {
 		if (this.X > 0) {
 			this.links();
-		}
-		else {
+		} else {
 			this.Richting = "rechts";
 			this.rechts();
 		}
 	}
-	if (this.Richting == "rechts") {
+	if (this.Richting === "rechts") {
 		if (this.X < (Math.floor((window.innerWidth - 50) / 50))) {
 			this.rechts();
-		}
-		else {
+		} else {
 			this.Richting = "links";
 			this.links();
 		}
@@ -167,6 +171,7 @@ var end;
 function gameOver() {
 	"use strict";
 	G_points = Points;
+	G_tijd = hour + ":" + minute + ":" + seconds;
 	window.location = "gameover.html";
 	clearInterval(moveB);
 	clearInterval(moveE);
@@ -190,6 +195,8 @@ function beweeg() {
 	}
 }
 $(window).on('resize', function () {
+	"use strict";
+	if(!gameovr){
 	numberH = Math.floor(window.innerHeight / 50);
 	numberW = Math.floor(window.innerWidth / 50);
 	offsetPlayerW = ((window.innerWidth) - (numberW * 50)) / 2;
@@ -207,13 +214,14 @@ $(window).on('resize', function () {
 	PosY = offsetPlayerH;
 	hero.element.css('left', PosX);
 	hero.element.css('bottom', PosY);
+	}
 });
 
 function increasePoints() {
 	"use strict";
 	Points += 1;
 	document.getElementById('points').innerHTML = Points;
-	console.log(10000 / Math.sqrt((Points + 1) * (numberH * numberW) / 100));
+	//console.log(10000 / Math.sqrt((Points + 1) * (numberH * numberW) / 100));
 }
 var time;
 
@@ -224,21 +232,19 @@ function createEnemy() {
 		RND = Math.floor(Math.random() * 2);
 		if (RND === 0) {
 			direction = 'links';
-		}
-		else if (RND === 1) {
-			direction = 'rechts'
+		} else if (RND === 1) {
+			direction = 'rechts';
 		}
 		if (vijanden.length <= MaxEnemy) {
 			clearTimeout(time);
 			PosX = Math.floor(Math.random() * window.innerWidth - 100) + offsetPlayerW;
 			PosY = Math.floor(Math.random() * window.innerHeight - 100) + offsetPlayerH;
-			if (PosX < window.innerWidth && PosX > (50 + offsetPlayerW) && PosY > offsetPlayerH && PosY < window.innerHeight - 100 && (PosX / 50 - 2 > hero.X || PosX / 50 < hero.X + 2) && (PosY / 50 - 2 > hero.Y || PosY / 50 < hero.Y + 2)) {
+			if (PosX < window.innerWidth && PosX > (50 + offsetPlayerW) && PosY > offsetPlayerH && PosY < window.innerHeight - 100 && (PosX / 50 - 2 >= hero.X || PosX / 50 <= hero.X + 2) && (PosY / 50 - 2 >= hero.Y || PosY / 50 <= hero.Y + 2)) {
 				vijanden.push(new Vijand(100, PosX, PosY, direction));
-			}
-			else {
+			} else {
 				PosX = Math.floor(Math.random() * window.innerWidth - 100) + offsetPlayerW;
 				PosY = Math.floor(Math.random() * window.innerHeight - 100) + offsetPlayerH;
-				if (PosX < window.innerWidth && PosX > (50 + offsetPlayerW) && PosY > (offsetPlayerH) && (PosX / 50 - 2 > hero.X || PosX / 50 < hero.X + 2) && (PosY / 50 - 2 > hero.Y || PosY / 50 < hero.Y + 2)) {
+				if (PosX < window.innerWidth && PosX > (50 + offsetPlayerW) && PosY > offsetPlayerH && PosY < window.innerHeight - 100 && (PosX / 50 - 2 >= hero.X || PosX / 50 <= hero.X + 2) && (PosY / 50 - 2 >= hero.Y || PosY / 50 <= hero.Y + 2)) {
 					vijanden.push(new Vijand(100, PosX, PosY, direction));
 				}
 			}
@@ -249,8 +255,7 @@ function createEnemy() {
 		}
 	}
 }
-var Powerups = [];
-var RND;
+
 
 function createPowerUp() {
 	"use strict";
@@ -337,14 +342,11 @@ function attack() {
 		fire.play();
 		if (Richting === 'rechts') {
 			Angle = 90;
-		}
-		else if (Richting === 'links') {
+		} else if (Richting === 'links') {
 			Angle = -90;
-		}
-		else if (Richting === 'omhoog') {
+		} else if (Richting === 'omhoog') {
 			Angle = 0;
-		}
-		else if (Richting === 'omlaag') {
+		} else if (Richting === 'omlaag') {
 			Angle = 180;
 		}
 		vurenmogelijk = false;
@@ -411,10 +413,9 @@ function checkCollide() {
 	"use strict";
 	checkHeroCollide();
 	var j, i;
-	lus: for (i = 0; i < vijanden.length; i += 1) {
+lus:  for (i = 0; i < vijanden.length; i += 1) {
 		for (j = 0; j < kogels.length; j += 1) {
-			var kogelX = kogels[j].X
-				, kogelY = kogels[j].Y;
+			var kogelX = kogels[j].X, kogelY = kogels[j].Y;
 			if (vijanden[i].Health === 0) {
 				////console.log(vijanden[i].Health)
 				vijanden[i].element.detach();
@@ -536,26 +537,27 @@ function mute() {
 }
 
 function countTimer() {
-	++totalSeconds;
-	var hour = Math.floor(totalSeconds / 3600);
-	var minute = Math.floor((totalSeconds - hour * 3600) / 60);
-	var seconds = totalSeconds - (hour * 3600 + minute * 60);
+	totalSeconds += 1;
+	hour = Math.floor(totalSeconds / 3600);
+	minute = Math.floor((totalSeconds - hour * 3600) / 60);
+	seconds = totalSeconds - (hour * 3600 + minute * 60);
 	document.getElementById("timer").innerHTML = hour + ":" + minute + ":" + seconds;
 }
 
 function start() {
 	"use strict";
-	if (document.getElementById('naam').value !== "") {
+	if (document.getElementById('naam').value !== "" && document.getElementById('naam').value.length <= 6) {
 		gameovr = false;
 		background.play();
 		background.loop = true;
 		$('h1').remove();
 		$('h3').remove();
+		
 		G_naam = document.getElementById("naam").value;
 		$('input').remove();
 		$('#ToonSpelregels').remove();
 		$('#ToonControls').remove();
-		var container = $('#container');
+		container = $('#container');
 		level = container;
 		container.css('height', (numberH * 50) - 50);
 		container.css('width', numberW * 50);

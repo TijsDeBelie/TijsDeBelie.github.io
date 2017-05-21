@@ -32,8 +32,7 @@
 				$("#adres tbody").html(antwoord);
 			}).fail(function () {
 				$("th").remove();
-				
-				var db = openDatabase('Highscores', '1.0', 'Highscores of the Dungeon Runner game', 2 * 1024 * 1024);
+				var db = openDatabase('Highscores', '1.0', 'Highscores of the Dungeon Runner game', 3 * 1024 * 1024);
 				db.transaction(function (tx) {
 					tx.executeSql('SELECT * FROM LOGS order by punten desc', [], function (tx, results) {
 						var len = results.rows.length
@@ -41,11 +40,12 @@
 						var antwoord = "";
 						for (i = 0; i < len; i++) {
 							if (i < 10) {
-							antwoord += results.rows.item(i).naam
-							antwoord += " " + results.rows.item(i).punten + "<br>"
+								antwoord += results.rows.item(i).naam + " | "
+								antwoord += " " + results.rows.item(i).punten + " | "
+								antwoord += " " + results.rows.item(i).tijd + "<br>"
 							}
 						}
-						$("#status").html(antwoord);
+						$("#status").html("Naam | Punten | Tijd" + "<br>" + antwoord);
 					}, null);
 				});
 			}).always(function () {

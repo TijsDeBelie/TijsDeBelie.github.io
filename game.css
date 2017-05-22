@@ -172,12 +172,12 @@ td {
 	display: none;
 	position: absolute;
 	width: 60%;
-	height: 30%;
+	height: 35%;
 	border-radius: 25px;
 	z-index: 100;
 	margin: auto;
 	left: 20%;
-	line-height: 5vh;
+	line-height: 5.5vh;
 }
 
 #ToonSpelregels {
@@ -210,11 +210,11 @@ td {
 	margin: auto;
 	position: absolute;
 	width: 60%;
-	height: 30%;
+	height: 35%;
 	border-radius: 25px;
 	z-index: 100;
 	left: 20%;
-	line-height: 5vh;
+	line-height: 6vh;
 }
 
 sub {

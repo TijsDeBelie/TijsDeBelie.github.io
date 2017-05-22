@@ -39,8 +39,14 @@ var seconds;
 var container;
 var Powerups = [];
 var RND;
-//sounds
+
+var heroHealth = document.getElementById("health");
+var execute = true;
+
 /*global Audio, gameOver, kongregate, Points, storeData, G_points:true, time:true, checkHeroCollide, resetvuren, createDatabase, G_naam:true, gameovr, G_tijd:true*/
+
+//sounds 
+
 var pain = new Audio('pain.mp3');
 var fire = new Audio('fire.mp3');
 fire.volume = 0.5;
@@ -49,6 +55,26 @@ var background = new Audio('background.mp3');
 background.volume = 0.5;
 var heal = new Audio('heal.mp3');
 
+
+
+
+
+/**********************************************************
+
+
+
+
+
+CONSTUCTORS VOOR ALLE ELEMENTEN DIE MOETEN KUNENN SPAWNEN
+
+
+
+
+**************************************************************/
+
+
+
+/* JE MANNETJE DAT JE KUNT BEWEGEN MET PIJLTJES OF SLEPEN MET DE MUIS/VINGER */
 function Hero(Health, PosX, PosY) {
 	"use strict";
 	/*global $ */
@@ -63,6 +89,8 @@ function Hero(Health, PosX, PosY) {
 	this.X = X;
 	this.Y = Y;
 }
+
+/* KOGEL DIE WORDT AFGEVUURD IN DE RICHTING WAAR JE KIJKT EN OP DE POSITIE DAT JE STAAT, ACTIEKNOP: SPATIE*/
 
 function Kogel(PosX, PosY, Angle, Richting) {
 	"use strict";
@@ -80,6 +108,8 @@ function Kogel(PosX, PosY, Angle, Richting) {
 	this.element.appendTo(level);
 }
 
+
+/* POWERUPS, MOGELIJKHEID TOT UITBRIJDING NAAR MEERDERE SOORTEN */
 function PowerUp(PPosX, PPosY, Soort, tijd) {
 	"use strict";
 	/*global $ */
@@ -96,6 +126,7 @@ function PowerUp(PPosX, PPosY, Soort, tijd) {
 }
 //create enemy and append to level
 //give health and X and Y position
+
 function Vijand(Health, PosX, PosY, direction) {
 	"use strict";
 	this.Health = Health;
@@ -109,6 +140,10 @@ function Vijand(Health, PosX, PosY, direction) {
 	this.element.appendTo(level);
 	this.Richting = direction;
 }
+
+/* LAAT DE VIJAND BEWEGEN, NAAR LINKS ALS DE RAND RECHTS VAN DE VIJAND IS EN VICE VERSA */
+
+
 Vijand.prototype.beweeg = function () {
 	"use strict";
 	if (this.Richting === "links") {
@@ -149,8 +184,7 @@ function updateHealth() {
 	outer.css('background-color', 'black');
 	inner.css('width', window.innerWidth / 10 * hero.Health / 100);
 }
-var heroHealth = document.getElementById("health");
-var execute = true;
+
 
 function checkAlive() {
 	"use strict";
@@ -196,24 +230,24 @@ function beweeg() {
 }
 $(window).on('resize', function () {
 	"use strict";
-	if(!gameovr){
-	numberH = Math.floor(window.innerHeight / 50);
-	numberW = Math.floor(window.innerWidth / 50);
-	offsetPlayerW = ((window.innerWidth) - (numberW * 50)) / 2;
-	offsetPlayerH = ((window.innerHeight) - (numberH * 50)) / 2;
-	container = $('#container');
-	container.css('height', (numberH * 50) - 50);
-	container.css('width', numberW * 50);
-	container.css('top', offsetPlayerH + 50 + 'px');
-	$('#outer').css('left', offsetPlayerW);
-	$('#outer').css('top', offsetPlayerH);
-	$('#points').css('right', offsetPlayerW);
-	hero.X = 0;
-	hero.Y = 0;
-	PosX = offsetPlayerW;
-	PosY = offsetPlayerH;
-	hero.element.css('left', PosX);
-	hero.element.css('bottom', PosY);
+	if (!gameovr) {
+		numberH = Math.floor(window.innerHeight / 50);
+		numberW = Math.floor(window.innerWidth / 50);
+		offsetPlayerW = ((window.innerWidth) - (numberW * 50)) / 2;
+		offsetPlayerH = ((window.innerHeight) - (numberH * 50)) / 2;
+		container = $('#container');
+		container.css('height', (numberH * 50) - 50);
+		container.css('width', numberW * 50);
+		container.css('top', offsetPlayerH + 50 + 'px');
+		$('#outer').css('left', offsetPlayerW);
+		$('#outer').css('top', offsetPlayerH);
+		$('#points').css('right', offsetPlayerW);
+		hero.X = 0;
+		hero.Y = 0;
+		PosX = offsetPlayerW;
+		PosY = offsetPlayerH;
+		hero.element.css('left', PosX);
+		hero.element.css('bottom', PosY);
 	}
 });
 
@@ -251,7 +285,8 @@ function createEnemy() {
 			time = setTimeout(createEnemy, 10000 / Math.sqrt((Points + 1) * (numberH * numberW) / 100));
 		}
 		if (vijanden.length === 0) {
-			setTimeout(createEnemy, 10);
+			createEnemy();
+			
 		}
 	}
 }
@@ -412,10 +447,11 @@ function checkHeroCollide() {
 function checkCollide() {
 	"use strict";
 	checkHeroCollide();
-	var j, i;
-lus:  for (i = 0; i < vijanden.length; i += 1) {
+	var j, i, kogelX, kogelY;
+	for (i = 0; i < vijanden.length; i += 1) {
 		for (j = 0; j < kogels.length; j += 1) {
-			var kogelX = kogels[j].X, kogelY = kogels[j].Y;
+			kogelX = kogels[j].X;
+			kogelY = kogels[j].Y;
 			if (vijanden[i].Health === 0) {
 				////console.log(vijanden[i].Health)
 				vijanden[i].element.detach();
@@ -431,10 +467,8 @@ lus:  for (i = 0; i < vijanden.length; i += 1) {
 				if (vijanden[i].Health === 0) {
 					vijanden[i].element.detach();
 					vijanden.splice(i, 1);
-					createEnemy();
 					increasePoints();
 				}
-				continue lus;
 			}
 		}
 	}
@@ -451,20 +485,17 @@ function MoveBullet() {
 				left: "+=25"
 			}, 25);
 			kogels[j].X += 0.5;
-		}
-		else if (kogels[j].Richting === 'links') {
+		} else if (kogels[j].Richting === 'links') {
 			kogels[j].element.animate({
 				left: "-=25"
 			}, 25);
 			kogels[j].X -= 0.5;
-		}
-		else if (kogels[j].Richting === 'omhoog') {
+		} else if (kogels[j].Richting === 'omhoog') {
 			kogels[j].element.animate({
 				bottom: "+=25"
 			}, 25);
 			kogels[j].Y += 0.5;
-		}
-		else if (kogels[j].Richting === 'omlaag') {
+		} else if (kogels[j].Richting === 'omlaag') {
 			kogels[j].element.animate({
 				bottom: "-=25"
 			}, 25);
@@ -496,6 +527,7 @@ var arrow_keys_handler = function (e) {
 };
 window.addEventListener("keydown", arrow_keys_handler, false);
 /* STOP GELEENDE CODE */
+
 function home() {
 	"use strict";
 	window.location = "index.html";
@@ -524,8 +556,7 @@ function mute() {
 		background.volume = 0;
 		heal.volume = 0;
 		pressed = true;
-	}
-	else {
+	} else {
 		$('#Mute span').html("Mute");
 		pain.volume = 1;
 		fire.volume = 0.5;
@@ -536,13 +567,18 @@ function mute() {
 	}
 }
 
+
 function countTimer() {
+	"use strict";
 	totalSeconds += 1;
 	hour = Math.floor(totalSeconds / 3600);
 	minute = Math.floor((totalSeconds - hour * 3600) / 60);
 	seconds = totalSeconds - (hour * 3600 + minute * 60);
 	document.getElementById("timer").innerHTML = hour + ":" + minute + ":" + seconds;
 }
+/* startfunctie */
+
+
 
 function start() {
 	"use strict";
@@ -592,8 +628,7 @@ function start() {
 		createDatabase();
 		timerVar = setInterval(countTimer, 1000);
 		totalSeconds = 0;
-	}
-	else {
+	} else {
 		$("#naam").css("border-color", "red");
 	}
 }

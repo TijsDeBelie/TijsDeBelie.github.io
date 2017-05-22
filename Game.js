@@ -47,13 +47,13 @@ var execute = true;
 
 //sounds 
 
-var pain = new Audio('pain.mp3');
-var fire = new Audio('fire.mp3');
+var pain = new Audio('sounds/pain.mp3');
+var fire = new Audio('sounds/fire.mp3');
 fire.volume = 0.5;
-var hurt = new Audio('hurt.mp3');
-var background = new Audio('background.mp3');
+var hurt = new Audio('sounds/hurt.mp3');
+var background = new Audio('sounds/background.mp3');
 background.volume = 0.5;
-var heal = new Audio('heal.mp3');
+var heal = new Audio('sounds/heal.mp3');
 
 
 

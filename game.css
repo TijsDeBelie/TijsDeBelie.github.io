@@ -16,7 +16,7 @@ body {
 	color: white;
 	font-size: 5vw;
 	text-align: center;
-	background-image: url(tile.jpg);
+	background-image: url(img/tile.jpg);
 	background-size: contain;
 }
 
@@ -31,7 +31,7 @@ body {
 .cube {
 	position: fixed;
 	display: block;
-	background-image: url(Hero.png);
+	background-image: url(img/Hero.png);
 	background-size: 50px 50px;
 	height: 50px;
 	width: 50px;
@@ -40,7 +40,7 @@ body {
 .enemy {
 	width: 50px;
 	height: 50px;
-	background-image: url(enemy.png);
+	background-image: url(img/enemy.png);
 	background-size: contain;
 	background-repeat: no-repeat;
 	position: absolute;
@@ -50,7 +50,7 @@ body {
 .kogel {
 	position: fixed;
 	display: block;
-	background-image: url(bullet.gif);
+	background-image: url(img/bullet.gif);
 	background-size: 50px 50px;
 	height: 50px;
 	width: 50px;
@@ -101,7 +101,7 @@ body {
 
 .Powerup {
 	position: fixed;
-	background-image: url(heart.gif);
+	background-image: url(img/heart.gif);
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-size: 50px 50px;

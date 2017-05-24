@@ -39,11 +39,12 @@ var seconds;
 var container;
 var Powerups = [];
 var RND;
+var time;
 
 var heroHealth = document.getElementById("health");
 var execute = true;
 
-/*global Audio, gameOver, kongregate, Points, storeData, G_points:true, time:true, checkHeroCollide, resetvuren, createDatabase, G_naam:true, gameovr, G_tijd:true*/
+/*global Audio, gameOver, kongregate, Points, storeData, G_points:true, time:true, checkHeroCollide, resetvuren, createDatabase, G_naam:true, gameovr, G_tijd:true, alert*/
 
 //sounds 
 
@@ -186,24 +187,27 @@ function updateHealth() {
 }
 
 
+/*CHeck health van hero, als deze nul is wordt gameover aangeroepen*/
+
 function checkAlive() {
 	"use strict";
 	if (execute === true) {
 		if (hero.Health <= 0) {
 			gameovr = true;
-			pain.volume = 0;
-			fire.volume = 0;
-			hurt.volume = 0;
-			heal.volume = 0;
-			gameOver();
+			
 			execute = false;
 		}
 	}
 }
-var end;
+/*Stopt all bewegingen en zet volume van muziek op 0, verandert het scherm naar gameover, waar je de herstart knop hebt*/
 
 function gameOver() {
 	"use strict";
+	pain.volume = 0;
+	fire.volume = 0;
+	hurt.volume = 0;
+	heal.volume = 0;
+	gameOver();
 	G_points = Points;
 	G_tijd = hour + ":" + minute + ":" + seconds;
 	window.location = "gameover.html";
@@ -220,14 +224,21 @@ function gameOver() {
 	storeData();
 }
 
+/* alle vijanden die in de array zitten worden aangeroepen en de functie beweeg op toegepast */
+
 function beweeg() {
 	"use strict";
-	//console.log('loopt door');
+
 	var i;
 	for (i = 0; i < vijanden.length; i += 1) {
 		vijanden[i].beweeg();
 	}
 }
+
+
+/* als het scherm kleiner of groter wordt, wordt de positie van je hero terug op 0, 0 gezet(dit om zware berekeningen te moeten voorkomen), en wordt het speelveld dynamisch aangepast */
+
+
 $(window).on('resize', function () {
 	"use strict";
 	if (!gameovr) {
@@ -255,10 +266,9 @@ function increasePoints() {
 	"use strict";
 	Points += 1;
 	document.getElementById('points').innerHTML = Points;
-	//console.log(10000 / Math.sqrt((Points + 1) * (numberH * numberW) / 100));
 }
-var time;
 
+var radius = 5;
 function createEnemy() {
 	"use strict";
 	if (vijanden.length <= MaxEnemy) {
@@ -273,12 +283,12 @@ function createEnemy() {
 			clearTimeout(time);
 			PosX = Math.floor(Math.random() * window.innerWidth - 100) + offsetPlayerW;
 			PosY = Math.floor(Math.random() * window.innerHeight - 100) + offsetPlayerH;
-			if (PosX < window.innerWidth && PosX > (50 + offsetPlayerW) && PosY > offsetPlayerH && PosY < window.innerHeight - 100 && (PosX / 50 - 2 >= hero.X || PosX / 50 <= hero.X + 2) && (PosY / 50 - 2 >= hero.Y || PosY / 50 <= hero.Y + 2)) {
+			if (PosX < window.innerWidth && PosX > (50 + offsetPlayerW) && PosY > offsetPlayerH && PosY < window.innerHeight - 100 && (PosX / 50 - radius >= hero.X || PosX / 50 - radius <= hero.X) && (PosY / 50 - radius >= hero.Y || PosY / 50 - radius <= hero.Y)) {
 				vijanden.push(new Vijand(100, PosX, PosY, direction));
 			} else {
 				PosX = Math.floor(Math.random() * window.innerWidth - 100) + offsetPlayerW;
 				PosY = Math.floor(Math.random() * window.innerHeight - 100) + offsetPlayerH;
-				if (PosX < window.innerWidth && PosX > (50 + offsetPlayerW) && PosY > offsetPlayerH && PosY < window.innerHeight - 100 && (PosX / 50 - 2 >= hero.X || PosX / 50 <= hero.X + 2) && (PosY / 50 - 2 >= hero.Y || PosY / 50 <= hero.Y + 2)) {
+				if (PosX < window.innerWidth && PosX > (50 + offsetPlayerW) && PosY > offsetPlayerH && PosY < window.innerHeight - 100 && (PosX / 50 - radius >= hero.X || PosX / 50 - radius <= hero.X) && (PosY / 50 - radius >= hero.Y || PosY / 50 - radius <= hero.Y)) {
 					vijanden.push(new Vijand(100, PosX, PosY, direction));
 				}
 			}
@@ -630,5 +640,6 @@ function start() {
 		totalSeconds = 0;
 	} else {
 		$("#naam").css("border-color", "red");
+		alert("Please fill in a username (max 6 charachters)");
 	}
 }

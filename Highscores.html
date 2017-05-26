@@ -14,7 +14,7 @@
 		"use strict";
 		/*global $, console */
 		$(function () {
-			// de JSON data ophalen
+			// de JSON data ophalen, dit werkt niet meer sinds dat kongregate rechtstreekse toegang tot json files heeft ontzegt, de ajax functie zal altijd failen
 			$.getJSON({
 				type: "GET"
 				, url: "https://www.kongregate.com/api/high_scores/lifetime/129134.json"

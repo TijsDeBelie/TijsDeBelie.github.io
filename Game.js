@@ -196,6 +196,7 @@ function checkAlive() {
 			gameovr = true;
 			
 			execute = false;
+			gameOver();
 		}
 	}
 }
@@ -207,7 +208,6 @@ function gameOver() {
 	fire.volume = 0;
 	hurt.volume = 0;
 	heal.volume = 0;
-	gameOver();
 	G_points = Points;
 	G_tijd = hour + ":" + minute + ":" + seconds;
 	window.location = "gameover.html";

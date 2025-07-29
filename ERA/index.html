@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bid Form</title>
+    <script src="https://erabelgium--dev1.sandbox.my.salesforce.com/lightning/lightning.out.js"></script>
+    <script>
+      function init() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const recordId = urlParams.get("i");
+
+        $Lightning.use(
+          "c:BidFormAuraApp", // Replace with the name of your actual Aura app file without `.app`
+          function () {
+            $Lightning.createComponent(
+              "c:BidFormApp", // The exposed LWC
+              { recordId: recordId }, // attributes if needed
+              "container", // ID of the div where to mount it
+              function (cmp) {
+                console.log("BidFormApp component loaded!");
+              }
+            );
+          },
+          "https://erabelgium--dev1.sandbox.my.salesforce-sites.com"
+        );
+      }
+    </script>
+  </head>
+  <body onload="init()">
+    <div id="container"></div>
+  </body>
+</html>

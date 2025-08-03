@@ -12,13 +12,15 @@
 
         const selectedLanguage = urlParams.get("locale");
 
+
         $Lightning.use(
           "c:BidFormAuraApp", // Replace with the name of your actual Aura app file without `.app`
           function () {
             $Lightning.createComponent(
               "c:BidFormApp", // The exposed LWC
               { recordId: recordId,
-                selectedLanguage: selectedLanguage }, // attributes if needed
+                selectedLanguage: selectedLanguage,
+                hideCloseButton: true },
               "container", // ID of the div where to mount it
               function (cmp) {
                 console.log("BidFormApp component loaded!");

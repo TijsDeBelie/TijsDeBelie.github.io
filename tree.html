@@ -21,43 +21,39 @@
     }
 
     svg {
-        width: 360px;
-        height: 540px;
+        width: 380px;
+        height: 580px;
     }
 
-    /* Tree */
     .tree-path {
         fill: none;
         stroke: #ffd966;
         stroke-width: 4;
         stroke-linecap: round;
         stroke-linejoin: round;
-        stroke-dasharray: 2000;
-        stroke-dashoffset: 2000;
+        stroke-dasharray: 2600;
+        stroke-dashoffset: 2600;
         animation: drawTree 5s ease-in-out forwards;
-        filter: drop-shadow(0 0 6px rgba(255, 217, 102, 0.9));
+        filter: drop-shadow(0 0 7px rgba(255, 217, 102, 0.9));
     }
 
-    /* Sparkle */
     .sparkle {
         fill: #ffeb99;
         opacity: 0;
         filter: drop-shadow(0 0 10px gold);
     }
 
-    /* Trunk */
     .trunk {
         fill: none;
         stroke: #8b5a2b;
         stroke-width: 8;
         stroke-linecap: round;
-        stroke-dasharray: 180;
-        stroke-dashoffset: 180;
+        stroke-dasharray: 200;
+        stroke-dashoffset: 200;
         animation: drawTrunk 1.5s ease-out forwards;
-        animation-delay: 4.8s;
+        animation-delay: 4.9s;
     }
 
-    /* Gifts */
     .gift {
         fill: none;
         stroke: #ffd966;
@@ -66,25 +62,24 @@
         stroke-linejoin: round;
         opacity: 0;
         animation: fadeIn 1.5s ease forwards;
-        animation-delay: 5.4s;
+        animation-delay: 5.5s;
     }
 
-    /* Star */
     .star {
         fill: #ffeb99;
         opacity: 0;
         animation: starGlow 1.5s ease-in forwards;
-        animation-delay: 4.9s;
-        filter: drop-shadow(0 0 12px gold);
+        animation-delay: 4.8s;
+        filter: drop-shadow(0 0 14px gold);
     }
 
     h1 {
         margin-top: 18px;
-        font-size: 2.2rem;
-        letter-spacing: 1.5px;
+        font-size: 2.3rem;
+        letter-spacing: 1.6px;
         opacity: 0;
         animation: fadeIn 2s ease forwards;
-        animation-delay: 6s;
+        animation-delay: 6.1s;
     }
 
     p {
@@ -92,7 +87,7 @@
         font-size: 1rem;
         opacity: 0;
         animation: fadeIn 2s ease forwards;
-        animation-delay: 6.3s;
+        animation-delay: 6.4s;
         color: #ffeb99;
     }
 
@@ -117,50 +112,54 @@
 <body>
 <div class="card">
 
-<svg viewBox="0 0 360 540">
+<svg viewBox="0 0 380 580">
 
-    <!-- Star -->
+    <!-- Star aligned with tree apex -->
     <polygon
         class="star"
         points="
-        190,42
-        198,62
-        220,64
-        204,78
-        210,100
-        190,88
-        170,100
-        176,78
-        160,64
-        182,62
+        190,40
+        198,60
+        220,62
+        204,76
+        210,98
+        190,86
+        170,98
+        176,76
+        160,62
+        182,60
         "
     />
 
-    <!-- Tree path: left → tip → right, open bottom -->
+    <!-- Tree: wider, taller, more branches, looped corners -->
     <path
         id="treePath"
         class="tree-path"
         d="
-        M110 420
-        C60 380, 70 330, 120 300
-        C90 260, 110 220, 150 190
-        C140 150, 160 115, 190 90
-        C210 115, 230 150, 220 190
-        C260 220, 280 260, 240 300
-        C290 330, 300 380, 250 420
+        M90 470
+        C20 420, 40 360, 110 330
+        C60 300, 80 250, 140 225
+        C90 195, 115 155, 165 135
+        C145 105, 165 80, 190 65
+        C215 80, 235 105, 215 135
+        C265 155, 290 195, 240 225
+        C300 250, 320 300, 270 330
+        C340 360, 360 420, 290 470
         "
     />
 
     <!-- Sparkle following the pen tip -->
     <circle class="sparkle" r="4">
         <animateMotion dur="5s" path="
-        M110 420
-        C60 380, 70 330, 120 300
-        C90 260, 110 220, 150 190
-        C140 150, 160 115, 190 90
-        C210 115, 230 150, 220 190
-        C260 220, 280 260, 240 300
-        C290 330, 300 380, 250 420
+        M90 470
+        C20 420, 40 360, 110 330
+        C60 300, 80 250, 140 225
+        C90 195, 115 155, 165 135
+        C145 105, 165 80, 190 65
+        C215 80, 235 105, 215 135
+        C265 155, 290 195, 240 225
+        C300 250, 320 300, 270 330
+        C340 360, 360 420, 290 470
         " />
         <animate attributeName="opacity" values="1;0" dur="0.9s" repeatCount="indefinite"/>
     </circle>
@@ -169,36 +168,32 @@
     <path
         class="trunk"
         d="
-        M170 420
-        C165 470, 215 470, 210 420
+        M170 470
+        C165 525, 215 525, 210 470
         "
     />
 
     <!-- Gifts -->
     <g class="gift">
         <!-- Left gift -->
-        <rect x="90" y="440" width="60" height="40" />
-        <line x1="120" y1="440" x2="120" y2="480" />
-        <line x1="90" y1="460" x2="150" y2="460" />
-
-        <!-- Ribbon bow -->
-        <path d="M120 440 C110 430, 100 430, 95 435" />
-        <path d="M120 440 C130 430, 140 430, 145 435" />
+        <rect x="90" y="490" width="70" height="45" />
+        <line x1="125" y1="490" x2="125" y2="535" />
+        <line x1="90" y1="512" x2="160" y2="512" />
+        <path d="M125 490 C112 475, 100 475, 95 482" />
+        <path d="M125 490 C138 475, 150 475, 155 482" />
 
         <!-- Right gift -->
-        <rect x="220" y="445" width="55" height="35" />
-        <line x1="247" y1="445" x2="247" y2="480" />
-        <line x1="220" y1="462" x2="275" y2="462" />
-
-        <!-- Ribbon bow -->
-        <path d="M247 445 C237 435, 227 435, 222 440" />
-        <path d="M247 445 C257 435, 267 435, 272 440" />
+        <rect x="220" y="495" width="65" height="40" />
+        <line x1="252" y1="495" x2="252" y2="535" />
+        <line x1="220" y1="515" x2="285" y2="515" />
+        <path d="M252 495 C240 480, 228 480, 223 487" />
+        <path d="M252 495 C264 480, 276 480, 281 487" />
     </g>
 
 </svg>
 
 <h1>✨ Merry Christmas ✨</h1>
-<p>May your home be filled with love and light</p>
+<p>Wishing our family love, warmth, and joy</p>
 
 </div>
 </body>
